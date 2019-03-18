@@ -1,11 +1,73 @@
 #include <iostream>
 #include <pqxx/pqxx>
 #include <string>
+#include <fstream>
 #include "exerciser.h"
+#include "query_funcs.h"
 
 using namespace std;
 using namespace pqxx;
 
+  void load_players ( string filename, connection * C){
+
+    ifstream file;
+    file.open(filename);
+    if(!file.good()){
+      cout << "File not found." << endl;
+      return;
+    }
+
+    else{
+
+      string input_line;
+      while(getline(file, input_line)){
+
+	int id;
+	int team_id;
+	int uniform_num;
+	string first_name;
+	string last_name;
+	int mpg, ppg, rpg, apg;
+	float spg, bpg;
+
+	istringstream ss(input_line);
+	if(input_line.empty()){
+	  ;
+	}
+	else{
+	  if( !(ss >> id >> team_id >> uniform_num >> first_name >> last_name >> mpg >> ppg >> rpg >> apg >> spg >> bpg)){
+	    break;
+	  }
+	  else{
+
+	    ss >> id >> team_id >> uniform_num >> first_name >> last_name >> mpg >> ppg >> rpg >> apg >> spg >> bpg;
+	    cout << first_name << endl;
+	    cout << last_name << endl;
+
+	    size_t found = first_name.find("'");
+	    if(found != string::npos){
+	      first_name.replace(found,1,"''");
+	     }
+	    found = last_name.find("'");
+	    if(found != string::npos){
+	      last_name.replace(found,1, "''");
+	    }
+
+	    cout << first_name << endl;
+	    cout << last_name << endl;
+	    
+	    add_player(C, team_id, uniform_num, first_name, last_name, mpg, ppg, rpg, apg, spg, bpg);
+	 }
+
+
+	}
+	
+      }
+
+  }
+    file.close();
+
+  }
 
 
 void drop_existing_tables(connection * C){
@@ -22,24 +84,24 @@ void drop_existing_tables(connection * C){
 
 void add_player(connection * C){
 
-  string sql = "CREATE TABLE PLAYER("  \
-      "PLAYER_ID    SERIAL PRIMARY KEY     NOT NULL," \
-      "TEAM_ID      INT                    NOT NULL," \
-      "UNIFORM_NUM  INT                    NOT NULL," \
-      "FIRST_NAME   TEXT                   NOT NULL," \
-      "LAST_NAME    TEXT                   NOT NULL," \
-      "MPG          INT                    NOT NULL," \
-      "PPG          INT                    NOT NULL," \
-      "RPG          INT                    NOT NULL," \
-      "APG          INT                    NOT NULL," \
-      "SPG          REAL                   NOT NULL," \
+  string sql = "CREATE TABLE PLAYER("  
+      "PLAYER_ID    SERIAL PRIMARY KEY     NOT NULL," 
+      "TEAM_ID      INT                    NOT NULL," 
+      "UNIFORM_NUM  INT                    NOT NULL," 
+      "FIRST_NAME   TEXT                   NOT NULL," 
+      "LAST_NAME    TEXT                   NOT NULL," 
+      "MPG          INT                    NOT NULL," 
+      "PPG          INT                    NOT NULL," 
+      "RPG          INT                    NOT NULL," 
+      "APG          INT                    NOT NULL," 
+      "SPG          REAL                   NOT NULL," 
       "BPG          REAL                   NOT NULL);";  
          
 
     work W(*C);
     W.exec(sql);
     W.commit();
-    cout << "Table Player has been created" << endl;
+    cout << "Table Player has been created." << endl;
    
 };
 
@@ -47,23 +109,51 @@ void add_player(connection * C){
 
 void add_team (connection * C){
 
- string sql = "CREATE TABLE TEAM("  \
-      "TEAM_ID      SERIAL PRIMARY KEY     NOT NULL," \
-      "NAME         TEXT                   NOT NULL," \
-      "STATE_ID     INT                    NOT NULL," \
-      "COLOR_ID     INT                    NOT NULL," \
-      "WINS         INT                    NOT NULL," \
+ string sql = "CREATE TABLE TEAM("  
+      "TEAM_ID      SERIAL PRIMARY KEY     NOT NULL," 
+      "NAME         TEXT                   NOT NULL," 
+      "STATE_ID     INT                    NOT NULL," 
+      "COLOR_ID     INT                    NOT NULL," 
+      "WINS         INT                    NOT NULL," 
       "LOSSES       INT                    NOT NULL);";
 
     work W(*C);
     W.exec(sql);
     W.commit();
-    cout << "Table Team has been created" << endl;
+    cout << "Table Team has been created." << endl;
  
 
 };
-//void add_state(Connection * C){}
-//void add_color(Connection * C){};
+
+
+void add_state(connection * C){
+
+
+  string sql = "CREATE TABLE STATE(" 
+                "STATE_ID	SERIAL PRIMARY KEY NOT NULL," 
+	        "NAME		TEXT               NOT NULL);";
+
+  work W(*C);
+  W.exec(sql);
+  W.commit();
+  cout << "Table State has been created." << endl;
+
+}
+
+
+
+void add_color(connection * C){
+
+string sql = "CREATE TABLE COLOR("
+	     "COLOR_ID	SERIAL PRIMARY KEY NOT NULL,"
+	     "NAME	TEXT	           NOT NULL);";
+
+ work W(*C);
+ W.exec(sql);
+ W.commit();
+ cout << "Table Color has been created." << endl;
+  
+};
 
 
 
@@ -91,11 +181,23 @@ int main (int argc, char *argv[])
 
 
   //TODO: create PLAYER, TEAM, STATE, and COLOR tables in the ACC_BBALL database
-  //      load each table with rows from the provided source txt files
 
   drop_existing_tables(C);
   add_player(C);
   add_team(C);
+  add_state(C);
+  add_color(C);
+  
+
+ // load each table with rows from the provided source txt files
+
+  string filename  = "player.txt";
+  load_players(filename, C);  
+  
+
+
+
+  
   exercise(C);
 
 
