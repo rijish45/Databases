@@ -9,7 +9,6 @@ using namespace std;
 using namespace pqxx;
 
   void load_players ( string filename, connection * C){
-
     ifstream file;
     file.open(filename);
     if(!file.good()){
@@ -118,6 +117,48 @@ void load_teams( string filename, connection * C){
 }
 
 
+
+
+void load_state(string filename, connection * C) {
+
+ ifstream file;
+    file.open(filename);
+    if(!file.good()){
+      cout << "File not found." << endl;
+      return;
+    }
+
+    else{
+
+      string input_line;
+      while(getline(file, input_line)){
+
+	int state_id;
+	string state_name;
+       
+
+	istringstream ss(input_line);
+	if(input_line.empty()){
+	  ;
+	}
+	else{
+	  if(!(ss >> state_id >> state_name)){
+	    break;
+	  }
+	  else{
+	    add_state(C, state_name);
+	 }
+
+
+	}
+	
+      }
+
+  }
+    file.close();
+}
+
+
 void drop_existing_tables(connection * C){
 
 
@@ -127,7 +168,51 @@ void drop_existing_tables(connection * C){
   W.commit();
   
 
-};
+}
+
+void load_color(string filename, connection * C){
+
+
+ifstream file;
+    file.open(filename);
+    if(!file.good()){
+      cout << "File not found." << endl;
+      return;
+    }
+
+    else{
+
+      string input_line;
+      while(getline(file, input_line)){
+
+	int color_id;
+	string color_name;
+       
+
+	istringstream ss(input_line);
+	if(input_line.empty()){
+	  ;
+	}
+	else{
+	  if(!(ss >> color_id >> color_name)){
+	    break;
+	  }
+	  else{
+	    add_color(C, color_name);
+	 }
+
+
+	}
+	
+      }
+
+  }
+ 
+    file.close();
+}
+
+
+
 
 
 void add_player(connection * C){
@@ -151,7 +236,7 @@ void add_player(connection * C){
     W.commit();
     cout << "Table Player has been created." << endl;
    
-};
+}
 
 
 
@@ -171,7 +256,7 @@ void add_team (connection * C){
     cout << "Table Team has been created." << endl;
  
 
-};
+}
 
 
 void add_state(connection * C){
@@ -201,7 +286,7 @@ string sql = "CREATE TABLE COLOR("
  W.commit();
  cout << "Table Color has been created." << endl;
   
-};
+}
 
 
 
@@ -236,6 +321,7 @@ int main (int argc, char *argv[])
   add_state(C);
   add_color(C);
   
+  
 
  // load each table with rows from the provided source txt files
 
@@ -243,8 +329,10 @@ int main (int argc, char *argv[])
   load_players(filename, C);  
   filename = "team.txt";
   load_teams(filename, C);
-
-
+  filename = "state.txt";
+  load_state(filename, C);
+  filename = "color.txt";
+  load_color(filename, C);
 
   
   exercise(C);

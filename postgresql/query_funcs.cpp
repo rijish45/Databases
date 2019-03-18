@@ -26,7 +26,6 @@ void add_team(connection *C, string name, int state_id, int color_id, int wins, 
   string sql_temp = "INSERT INTO TEAM (NAME, STATE_ID, COLOR_ID, WINS, LOSSES)";
   ss << "VALUES ('" <<  name  << "', " << state_id << ", " <<  color_id  << ", " << wins  << ", "<< losses << ");";
   string sql = sql_temp + ss.str();
-
   W.exec(sql);
   W.commit();
   
@@ -35,11 +34,28 @@ void add_team(connection *C, string name, int state_id, int color_id, int wins, 
 
 void add_state(connection *C, string name)
 {
+
+  ostringstream ss;
+  work W(*C);
+  string sql_temp = "INSERT INTO STATE( NAME)";
+  ss << "VALUES ('" << name << "');";
+  string sql = sql_temp + ss.str();
+  W.exec(sql);
+  W.commit();
 }
 
 
 void add_color(connection *C, string name)
 {
+
+  ostringstream ss;
+  work W(*C);
+  string sql_temp = "INSERT INTO COLOR( NAME)";
+  ss << "VALUES ('" << name << "');";
+  string sql = sql_temp + ss.str();
+  W.exec(sql);
+  W.commit();
+  
 }
 
 
