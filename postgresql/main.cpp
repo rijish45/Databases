@@ -25,11 +25,13 @@ using namespace pqxx;
 	int id;
 	int team_id;
 	int uniform_num;
+	int state_id;
 	string first_name;
 	string last_name;
 	int mpg, ppg, rpg, apg;
 	float spg, bpg;
 
+	
 	istringstream ss(input_line);
 	if(input_line.empty()){
 	  ;
@@ -41,8 +43,8 @@ using namespace pqxx;
 	  else{
 
 	    ss >> id >> team_id >> uniform_num >> first_name >> last_name >> mpg >> ppg >> rpg >> apg >> spg >> bpg;
-	    cout << first_name << endl;
-	    cout << last_name << endl;
+	    // cout << first_name << endl;
+	    // cout << last_name << endl;
 
 	    size_t found = first_name.find("'");
 	    if(found != string::npos){
@@ -53,8 +55,8 @@ using namespace pqxx;
 	      last_name.replace(found,1, "''");
 	    }
 
-	    cout << first_name << endl;
-	    cout << last_name << endl;
+	    // cout << first_name << endl;
+	    // cout << last_name << endl;
 	    
 	    add_player(C, team_id, uniform_num, first_name, last_name, mpg, ppg, rpg, apg, spg, bpg);
 	 }
@@ -68,6 +70,52 @@ using namespace pqxx;
     file.close();
 
   }
+
+
+
+void load_teams( string filename, connection * C){
+
+  ifstream file;
+    file.open(filename);
+    if(!file.good()){
+      cout << "File not found." << endl;
+      return;
+    }
+
+    else{
+
+      string input_line;
+      while(getline(file, input_line)){
+
+	int team_id;
+	string team_name;
+	int losses;
+	int wins;
+	int state_id;
+	int color_id;
+       
+
+	istringstream ss(input_line);
+	if(input_line.empty()){
+	  ;
+	}
+	else{
+	  if( !(ss >> team_id >> team_name >> state_id >> color_id >> wins >> losses)){
+	    break;
+	  }
+	  else{
+	    add_team(C, team_name, state_id, color_id, wins, losses);
+	 }
+
+
+	}
+	
+      }
+
+  }
+    file.close();
+
+}
 
 
 void drop_existing_tables(connection * C){
@@ -193,7 +241,8 @@ int main (int argc, char *argv[])
 
   string filename  = "player.txt";
   load_players(filename, C);  
-  
+  filename = "team.txt";
+  load_teams(filename, C);
 
 
 

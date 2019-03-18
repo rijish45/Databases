@@ -21,6 +21,15 @@ void add_player(connection *C, int team_id, int jersey_num, string first_name, s
 
 void add_team(connection *C, string name, int state_id, int color_id, int wins, int losses)
 {
+  ostringstream ss;
+  work W(*C);
+  string sql_temp = "INSERT INTO TEAM (NAME, STATE_ID, COLOR_ID, WINS, LOSSES)";
+  ss << "VALUES ('" <<  name  << "', " << state_id << ", " <<  color_id  << ", " << wins  << ", "<< losses << ");";
+  string sql = sql_temp + ss.str();
+
+  W.exec(sql);
+  W.commit();
+  
 }
 
 
