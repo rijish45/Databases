@@ -26,27 +26,35 @@ void exercise(connection *C)
 	   1, 20, 0,
 	   0, 0, 0);
 
+   cout << endl;
+
+   
 cout << "Testing query 2" << endl;
 query2(C, "Red");
 query2(C, "Orange");
 query2(C, "Green");
-
+cout << endl;
+ 
 
 cout << "Testing query 3" << endl;
 query3(C, "NCSU");
 query3(C,"Duke");
-query3("Clemson");
+query3(C, "Clemson");
+cout << endl;
 
+ 
 
 cout << "Testing query 4" << endl; 
 query4(C, "NC", "LightBlue");
-query4(C, "MA", "Red");
-query4(C, "NY", "Orange");  
+query4(C, "NY", "Orange");
+cout << endl;
+ 
 
 
 cout << "Testing query 5" << endl;
 query5(C, 5);
 query5(C, 9);
-query(C, 14);
+query5(C, 12);
+cout << endl;
 
 }
