@@ -222,11 +222,15 @@ void query4(connection *C, string team_state, string team_color)
 }
 
 
-/*void query5(connection *C, int num_wins)
+void query5(connection *C, int num_wins)
 {
 
 
-  string sql =  "SELECT P.FIRST_NAME, P.LAST_NAME, T.NAME, T.WINS FROM PLAYER AS P, TEAM AS T WHERE P.TEAM_ID = T.TEAM_ID AND WINS " + " > " + num_wins + " ;";
+  // string sql =  "SELECT P.FIRST_NAME, P.LAST_NAME, T.NAME, T.WINS FROM PLAYER AS P, TEAM AS T WHERE (P.TEAM_ID = T.TEAM_ID AND WINS " + " > " + num_wins + ") ;";
+  ostringstream ss;
+  ss << "SELECT P.FIRST_NAME, P.LAST_NAME, T.NAME, T.WINS " << "FROM PLAYER AS P, TEAM AS T " << "WHERE P.TEAM_ID = T.TEAM_ID AND WINS > " << num_wins << ";";
+  string sql = ss.str();
+
   nontransaction N(*C);
   result output = N.exec(sql);
   
@@ -236,10 +240,11 @@ void query4(connection *C, string team_state, string team_color)
     {
       cout << it[0].as<string>() << " ";
       cout << it[1].as<string>() << " ";
-      cout << it[2].as<int>() << endl;
+      cout << it[2].as<string>() << " ";
+      cout << it[3].as<int>() << endl;
     }
 
 
 
 
-}*/
+}

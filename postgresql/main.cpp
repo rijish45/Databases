@@ -347,7 +347,8 @@ int main (int argc, char *argv[])
 
   */
 
-  query4(C, "NC", "LightBlue");
+  // query4(C, "NC", "LightBlue");
+  query5(C, 5);
   exercise(C);
 
 
