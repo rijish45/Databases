@@ -12,6 +12,7 @@ using namespace pqxx;
  //Load the players table by reading the file
 
   void load_players ( string filename, connection * C){
+    
     ifstream file;
     file.open(filename);
     if(!file.good()){
@@ -35,14 +36,13 @@ using namespace pqxx;
 
 	
 	istringstream ss(input_line);
-	if(input_line.empty()){
-	  ;
-	}
-	else{
-	  if( !(ss >> id >> team_id >> uniform_num >> first_name >> last_name >> mpg >> ppg >> rpg >> apg >> spg >> bpg)){
+	if(!input_line.empty()){
+
+	  if(!(ss >> id >> team_id >> uniform_num >> first_name >> last_name >> mpg >> ppg >> rpg >> apg >> spg >> bpg)){
 	    break;
 	  }
-	  else{
+	  
+    else{
 
 	    ss >> id >> team_id >> uniform_num >> first_name >> last_name >> mpg >> ppg >> rpg >> apg >> spg >> bpg;
 	    // cout << first_name << endl;
@@ -85,10 +85,10 @@ void load_teams( string filename, connection * C){
       return;
     }
 
-    else{
+else{
 
-      string input_line;
-      while(getline(file, input_line)){
+string input_line;
+while(getline(file, input_line)){
 
 	int team_id;
 	string team_name;
@@ -98,22 +98,18 @@ void load_teams( string filename, connection * C){
 	int color_id;
        
 
-	istringstream ss(input_line);
-	if(input_line.empty()){
-	  ;
-	}
-	else{
-	  if( !(ss >> team_id >> team_name >> state_id >> color_id >> wins >> losses)){
-	    break;
-	  }
-	  else{
-	    add_team(C, team_name, state_id, color_id, wins, losses);
-	 }
-
-
-	}
 	
-      }
+	if(!input_line.empty()){
+	
+    istringstream ss(input_line);
+	  if( !(ss >> team_id >> team_name >> state_id >> color_id >> wins >> losses))
+	    break;
+	  else
+	    add_team(C, team_name, state_id, color_id, wins, losses);
+
+}
+	
+     }
 
   }
     file.close();
@@ -138,28 +134,22 @@ void load_state(string filename, connection * C) {
       string input_line;
       while(getline(file, input_line)){
 
-	int state_id;
-	string state_name;
+	       int state_id;
+	       string state_name;
        
 
-	istringstream ss(input_line);
-	if(input_line.empty()){
-	  ;
-	}
-	else{
-	  if(!(ss >> state_id >> state_name)){
-	    break;
-	  }
-	  else{
-	    add_state(C, state_name);
-	 }
-
-
-	}
 	
-      }
+	   if(!input_line.empty()){
 
-  }
+      istringstream ss(input_line);
+	     if(!(ss >> state_id >> state_name))
+	           break;
+	     else
+	         add_state(C, state_name);
+    	}
+	
+   }
+}
     file.close();
 }
 
@@ -193,28 +183,22 @@ ifstream file;
 
       string input_line;
       while(getline(file, input_line)){
-
-	int color_id;
-	string color_name;
+      
+      int color_id;
+    	string color_name;
        
 
-	istringstream ss(input_line);
-	if(input_line.empty()){
-	  ;
-	}
-	else{
-	  if(!(ss >> color_id >> color_name)){
-	    break;
-	  }
-	  else{
-	    add_color(C, color_name);
-	 }
-
-
-	}
 	
-      }
+	if(!input_line.empty()){
 
+    istringstream ss(input_line);
+	  if(!(ss >> color_id >> color_name))
+	    break;
+	  else
+	    add_color(C, color_name);
+  }
+	
+}
   }
  
     file.close();
