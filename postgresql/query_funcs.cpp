@@ -201,9 +201,45 @@ void query3(connection *C, string team_name)
 
 void query4(connection *C, string team_state, string team_color)
 {
+
+  nontransaction N(*C);
+  string sql = "SELECT P.FIRST_NAME, P.LAST_NAME, P.UNIFORM_NUM "  
+                "FROM PLAYER AS P, TEAM AS T, STATE AS S, COLOR AS C "
+                "WHERE P.TEAM_ID = T.TEAM_ID AND T.COLOR_ID = C.COLOR_ID AND T.STATE_ID = S.STATE_ID " 
+                "AND S.NAME = '" + team_state + "' AND C.NAME = '" + team_color + "' ;"; 
+  result output = N.exec(sql);
+  cout << "FIRST_NAME LAST_NAME UNIFORM_NUM" << endl;
+  result::iterator it;
+
+  for (it = output.begin(); it != output.end(); it++)
+    {
+      cout << it[0].as<string>() << " ";
+      cout << it[1].as<string>() << " ";
+      cout << it[2].as<int>() << endl;
+    }
+
+
 }
 
 
-void query5(connection *C, int num_wins)
+/*void query5(connection *C, int num_wins)
 {
-}
+
+
+  string sql =  "SELECT P.FIRST_NAME, P.LAST_NAME, T.NAME, T.WINS FROM PLAYER AS P, TEAM AS T WHERE P.TEAM_ID = T.TEAM_ID AND WINS " + " > " + num_wins + " ;";
+  nontransaction N(*C);
+  result output = N.exec(sql);
+  
+  cout << "FIRST_NAME LAST_NAME NAME WINS" << endl;
+  result::iterator it;
+  for (it = output.begin(); it != output.end(); it++)
+    {
+      cout << it[0].as<string>() << " ";
+      cout << it[1].as<string>() << " ";
+      cout << it[2].as<int>() << endl;
+    }
+
+
+
+
+}*/

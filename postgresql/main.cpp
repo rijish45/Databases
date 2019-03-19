@@ -345,7 +345,9 @@ int main (int argc, char *argv[])
   query2(C, "Red");
   query3(C, "NCSU");
 
-  */ 
+  */
+
+  query4(C, "NC", "LightBlue");
   exercise(C);
 
 
