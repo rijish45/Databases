@@ -68,16 +68,134 @@ void query1(connection *C,
             int use_bpg, double min_bpg, double max_bpg
             )
 {
+  
+  nontransaction N(*C);
+  bool condition = true;
+  ostringstream sql;
+  sql << "SELECT * FROM PLAYER AS P ";
+
+  if(use_mpg){
+
+    sql << "WHERE P.MPG BETWEEN " << min_mpg << " AND " << max_mpg << "  ";
+    condition = false;
+    
+  }
+  if(use_ppg){
+
+    if(condition){
+      sql << " WHERE ";
+    }
+    else
+      sql << " AND ";
+
+    sql << " P.PPG BETWEEN " << min_ppg << " AND " << max_ppg << " ";
+    condition = false;
+    
+  }
+   if(use_rpg){
+
+    if(condition){
+      sql << " WHERE ";
+    }
+    else
+      sql << " AND ";
+
+    sql << " P.RPG BETWEEN " << min_rpg << " AND " << max_rpg << " ";
+    condition = false;
+    
+  }
+   if(use_apg){
+
+    if(condition){
+      sql << " WHERE ";
+    }
+    else
+      sql << " AND ";
+
+    sql << " P.APG BETWEEN " << min_ppg << " AND " << max_ppg << " ";
+    condition = false;
+    
+  }
+   if(use_spg){
+
+    if(condition){
+      sql << " WHERE ";
+    }
+    else
+      sql << " AND ";
+
+    sql << " P.SPG BETWEEN " << min_ppg << " AND " << max_ppg << " ";
+    condition = false;
+    
+  }
+   if(use_bpg){
+
+    if(condition){
+      sql << " WHERE ";
+    }
+    else
+      sql << " AND ";
+
+    sql << " P.BPG BETWEEN " << min_ppg << " AND " << max_ppg << " ";
+    condition = false;
+    
+  }
+ 
+   sql << " ; ";
+   result output = N.exec(sql.str());
+
+   cout << "PLAYER_ID TEAM_ID UNIFORM_NUM FIRST_NAME LAST_NAME MPG PPG RPG APG SPG BPG" << endl;
+   result::const_iterator it;
+   for (it = output.begin(); it != output.end(); it++){
+
+     cout << it[0].as<int>() << " ";
+     cout << it[1].as<int>() << " ";
+     cout << it[2].as<int>() << " ";
+     cout << it[3].as<string>() << " ";
+     cout << it[4].as<string>() << " ";
+     cout << it[5].as<int>() << " ";
+     cout << it[6].as<int>() << " ";
+     cout << it[7].as<int>() << " ";
+     cout << it[8].as<int>() << " ";
+     cout << it[9].as<float>() << " ";
+     cout << it[10].as<float>() << endl;
+     
+   }
+
 }
+   
+   
 
 
 void query2(connection *C, string team_color)
 {
+  string sql = "SELECT T.NAME FROM TEAM AS T, COLOR AS C WHERE T.COLOR_ID = C.COLOR_ID AND C.NAME = '" + team_color + "'; ";
+  nontransaction N(*C);
+  result output = N.exec(sql);
+
+  cout << "NAME" << endl;
+  result::iterator it;
+  for (it = output.begin(); it != output.end(); it++)
+    {
+      cout << it[0].as<string>() << endl;
+    }
 }
 
 
 void query3(connection *C, string team_name)
 {
+
+  string sql = "SELECT P.FIRST_NAME, P.LAST_NAME FROM PLAYER AS P, TEAM AS T WHERE P.TEAM_ID = T.TEAM_ID AND T.NAME = '" + team_name + "' " + "ORDER BY P.PPG DESC;";
+  nontransaction N(*C);
+  result output = N.exec(sql);
+
+  cout << "FIRST_NAME LAST_NAME" << endl;
+  result::iterator it;
+  for (it = output.begin(); it != output.end(); it++)
+    {
+      cout << it[0].as<string>() << " ";
+      cout << it[1].as<string>() << endl;
+    }
 }
 
 

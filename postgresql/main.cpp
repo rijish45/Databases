@@ -334,7 +334,18 @@ int main (int argc, char *argv[])
   filename = "color.txt";
   load_color(filename, C);
 
+  /*
+  query1(C,1, 35, 40,
+	   0, 0, 0,
+	   1, 0, 100,
+	   0, 0, 0,
+	   0, 0, 0,
+	   0, 0, 0);
   
+  query2(C, "Red");
+  query3(C, "NCSU");
+
+  */ 
   exercise(C);
 
 
