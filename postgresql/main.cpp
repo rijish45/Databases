@@ -8,6 +8,9 @@
 using namespace std;
 using namespace pqxx;
 
+ 
+ //Load the players table by reading the file
+
   void load_players ( string filename, connection * C){
     ifstream file;
     file.open(filename);
@@ -45,7 +48,7 @@ using namespace pqxx;
 	    // cout << first_name << endl;
 	    // cout << last_name << endl;
 
-	    size_t found = first_name.find("'");
+	    size_t found = first_name.find("'"); //Deal with ' in names
 	    if(found != string::npos){
 	      first_name.replace(found,1,"''");
 	     }
@@ -71,6 +74,7 @@ using namespace pqxx;
   }
 
 
+//Load the teams table by reading the file
 
 void load_teams( string filename, connection * C){
 
@@ -118,6 +122,7 @@ void load_teams( string filename, connection * C){
 
 
 
+//Load the state table by reading the file
 
 void load_state(string filename, connection * C) {
 
@@ -158,17 +163,21 @@ void load_state(string filename, connection * C) {
     file.close();
 }
 
+//Drop existing tables
 
 void drop_existing_tables(connection * C){
 
 
-  string sql = "DROP TABLE IF EXISTS PLAYER, TEAM, STATE, COLOR;";
+  string sql = "DROP TABLE IF EXISTS PLAYER, TEAM, STATE, COLOR ;";
   work W(*C);
   W.exec(sql);
   W.commit();
   
 
 }
+
+
+//Load the Color table by reading file
 
 void load_color(string filename, connection * C){
 
@@ -316,6 +325,9 @@ int main (int argc, char *argv[])
   //TODO: create PLAYER, TEAM, STATE, and COLOR tables in the ACC_BBALL database
 
   drop_existing_tables(C);
+
+  //Now create the tables
+
   add_player(C);
   add_team(C);
   add_state(C);
@@ -334,21 +346,7 @@ int main (int argc, char *argv[])
   filename = "color.txt";
   load_color(filename, C);
 
-  /*
-  query1(C,1, 35, 40,
-	   0, 0, 0,
-	   1, 0, 100,
-	   0, 0, 0,
-	   0, 0, 0,
-	   0, 0, 0);
-  
-  query2(C, "Red");
-  query3(C, "NCSU");
-
-  */
-
-  // query4(C, "NC", "LightBlue");
-  query5(C, 5);
+  //Test queries
   exercise(C);
 
 
