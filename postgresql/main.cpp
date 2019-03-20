@@ -101,7 +101,7 @@ while(getline(file, input_line)){
 	
 	if(!input_line.empty()){
 	
-    istringstream ss(input_line);
+	  istringstream ss(input_line);
 	  if( !(ss >> team_id >> team_name >> state_id >> color_id >> wins >> losses))
 	    break;
 	  else
@@ -141,7 +141,7 @@ void load_state(string filename, connection * C) {
 	
 	   if(!input_line.empty()){
 
-      istringstream ss(input_line);
+	     istringstream ss(input_line);
 	     if(!(ss >> state_id >> state_name))
 	           break;
 	     else
@@ -185,13 +185,13 @@ ifstream file;
       while(getline(file, input_line)){
       
       int color_id;
-    	string color_name;
+      string color_name;
        
 
 	
 	if(!input_line.empty()){
 
-    istringstream ss(input_line);
+	  istringstream ss(input_line);
 	  if(!(ss >> color_id >> color_name))
 	    break;
 	  else
