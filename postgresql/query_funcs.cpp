@@ -112,7 +112,7 @@ void query1(connection *C,
     else
       sql << " AND ";
 
-    sql << " P.APG BETWEEN " << min_ppg << " AND " << max_ppg << " ";
+    sql << " P.APG BETWEEN " << min_apg << " AND " << max_apg << " ";
     condition = false;
     
   }
@@ -124,7 +124,7 @@ void query1(connection *C,
     else
       sql << " AND ";
 
-    sql << " P.SPG BETWEEN " << min_ppg << " AND " << max_ppg << " ";
+    sql << " P.SPG BETWEEN " << min_spg << " AND " << max_spg << " ";
     condition = false;
     
   }
@@ -136,7 +136,7 @@ void query1(connection *C,
     else
       sql << " AND ";
 
-    sql << " P.BPG BETWEEN " << min_ppg << " AND " << max_ppg << " ";
+    sql << " P.BPG BETWEEN " << min_bpg << " AND " << max_bpg << " ";
     condition = false;
     
   }
